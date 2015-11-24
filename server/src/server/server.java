@@ -67,8 +67,7 @@ class EchoThread extends Thread{
              }
        }
 }
- 
- 
+		
 public class server {
        public static void main(String[] args) {
              ServerSocket server = null;

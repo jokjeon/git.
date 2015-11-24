@@ -33,9 +33,9 @@ public class Setting {
         serverSocket = new ServerSocket(9999);
         
         while(true){
-            monitor.appendMsg("�궗�슜�옄 ��湲곗쨷..." + "\r\n");
+            monitor.appendMsg("사용자 대기중..." + "\r\n");
             socket = serverSocket.accept();
-            monitor.appendMsg(socket.getInetAddress()+"�뿉�꽌 �젒�냽�뻽�뒿�땲�떎."+ "\r\n");
+            monitor.appendMsg(socket.getInetAddress()+"에서 접속했습니다.."+ "\r\n");
             
             Receiver receiver = new Receiver(socket);
             receiver.start();
@@ -44,28 +44,28 @@ public class Setting {
         
     }
 
-    //留듭쓽 �궡�슜(�겢�씪�씠�뼵�듃) ���옣�븳�떎.
+    //맵의 내용(클라이언트) 저장한다
     public void addClient(String nick, DataOutputStream out) throws IOException {
-        sendMessage(nick + "�떂�씠 �젒�냽�뻽�뒿�땲�떎.");
+        sendMessage(nick + "님이 접속했습니다..");
         clientsMap.put(nick, out);
     }
     
-    //留듭뿉�꽌 �겢�씪�씠�뼵�듃 �젙蹂대�� �젣嫄고븳�떎.
+    //맵에서 클라이언트 정보를 제거한다.
     public void removeClient(String nick) {
-        sendMessage(nick + "�떂�씠 �굹媛붿뒿�땲�떎.");
+        sendMessage(nick + "님이 나갔습니다.");
         clientsMap.remove(this);
     }
     
     
     public void sendMessage(String msg) {
-        //�쟾�넚�븷 硫붿꽭吏�媛� 諛쒖깮�븯硫�,
-        //留듭뿉 ���옣�맂 紐⑤뱺 �겢�씪�씠�뼵�듃 �젙蹂대�� 媛��졇��
+    	//전송할 메세지가 발생하면,
+        //맵에 저장된 모든 클라이언트 정보를 가져와
         Iterator<String> it = clientsMap.keySet().iterator();
         String key = "";
  
         while (it.hasNext()) {
             key = it.next();
-            try {//紐⑤뱺 �겢�씪�씠�뼵�듃�뿉 媛곴컖 硫붿꽭吏�瑜� �쟾�떖�븳�떎.
+            try {//모든 클라이언트에 각각 메세지를 전달한다.
                 clientsMap.get(key).writeUTF(msg);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -78,8 +78,8 @@ public class Setting {
         private DataOutputStream out;
         private String nick;
  
-        //由ъ떆踰꾧� �븳 �씪�� �옄湲� �샎�옄�꽌 �꽕�듃�썙�겕 泥섎━. 怨꾩냽 �뱽湲� 泥섎━�빐二쇰뒗 寃�
-        //�겢�씪�씠�뼵�듃�� 1:1濡� 由ъ떆踰꾧� �뿰寃곕맂�떎.
+        //리시버가 한 일은 자기 혼자서 네트워크 처리. 계속 듣기 처리해주는 것
+        //클라이언트와 1:1로 리시버가 연결된다.
         public Receiver(Socket socket) throws IOException {
             out = new DataOutputStream(socket.getOutputStream());
             in = new DataInputStream(socket.getInputStream());
@@ -88,21 +88,21 @@ public class Setting {
             addClient(nick, out);
         }
         
-        //Thread瑜� �긽�냽諛쏆븯�쑝誘�濡�, run() 硫붿냼�뱶瑜� �삤踰꾨씪�씠�뱶�빐�빞 �븳�떎.
+      //Thread를 상속받았으므로, run() 메소드를 오버라이드해야 한다.
         public void run() {
-            try {      //怨꾩냽 �뱽湲곕쭔 �븳�떎.
+            try {      //계속 듣기만 한다.
                 while (in != null) {
-                    //�냼耳볦쓣 �넻�빐 �뜲�씠�꽣瑜� �씫�뼱���꽌
+                	//소켓을 통해 데이터를 읽어와서
                     message = in.readUTF();
-                    //硫붿꽭吏�瑜� 媛� �겢�씪�씠�뼵�듃�뿉 �쟾�넚�븳�떎.
+                    //메세지를 각 클라이언트에 전송한다.
                     sendMessage(message);
-                    //�꽌踰� 梨꾪똿李쎌뿉 硫붿꽭吏�瑜� 異붽��븳�떎.
+                    //서버 채팅창에 메세지를 추가한다.
                     monitor.appendMsg(message);
                 }
             }catch (IOException e) {
-                //�궗�슜�옄媛� �젒�냽醫낅즺�떆 �뿬湲곗꽌 �뿉�윭諛쒖깮.
-                //�씠寃껋� �궗�슜�옄媛� �굹媛� 寃껋쓣 �쓽誘명븯誘�濡� 
-                //�뿬湲곗꽌 �겢�씪�씠�뼵�듃瑜� �젣嫄고븳�떎.
+            	//사용자가 접속종료시 여기서 에러발생.
+                //이것은 사용자가 나간 것을 의미하므로 
+                //여기서 클라이언트를 제거한다.
                 removeClient(nick);
             }
         }

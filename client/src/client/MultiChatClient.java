@@ -12,10 +12,12 @@ class WriteThread{
        ClientFrame cf;
        String str;
        String id;
+       
        public WriteThread(ClientFrame cf) {
              this.cf  = cf;
              this.socket= cf.socket;
        }
+       
        public void sendMsg() {
              //키보드로부터 읽어오기 위한 스트림객체 생성
              BufferedReader br=
@@ -35,8 +37,7 @@ class WriteThread{
                            str= "["+id+"] "+cf.txtF.getText();
                     }
                     //입력받은 문자열 서버로 보내기
-                    pw.println(str);
-            
+                    pw.println(str);            
              }catch(IOException ie){
                     System.out.println(ie.getMessage());
              }finally{
@@ -53,6 +54,7 @@ class WriteThread{
              id = Id.getId();
        }
 }
+
 //서버가 보내온 문자열을 전송받는 스레드
 class ReadThread extends Thread{
        Socket socket;
@@ -88,6 +90,7 @@ class ReadThread extends Thread{
              }
        }
 }
+
 public class MultiChatClient {
        public static void main(String[] args) {
              Socket socket=null;
@@ -101,9 +104,4 @@ public class MultiChatClient {
                     System.out.println(ie.getMessage());
              }
        }
-}
- 
- 
- 
- 
- 
+} 
