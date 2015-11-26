@@ -56,7 +56,7 @@ public class Server extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>                        
-// netbeans 切疑 持失
+ // netbeans 切疑 持失
    
     public static void main(String args[]) throws IOException{
         new Server();
