@@ -10,10 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- *
- * @author Sensor
- */
+
 public class Setting {
     
     private ServerSocket serverSocket;
@@ -23,30 +20,28 @@ public class Setting {
     
     private Map<String, DataOutputStream> clientsMap = new HashMap<String, DataOutputStream>();
 
-    public final void setGui(Server m){
+    public final void setGui(Server m){ //gui set
         this.monitor = m;
     }
     
     public void set() throws IOException{
         
         Collections.synchronizedMap(clientsMap);
-        serverSocket = new ServerSocket(9999);
+        serverSocket = new ServerSocket(9999); // serverSocket 객체 생성(포트번호 9999)
         
         while(true){
             monitor.appendMsg("사용자 대기중..." + "\r\n");
             socket = serverSocket.accept();
-            monitor.appendMsg(socket.getInetAddress()+"에서 접속했습니다.."+ "\r\n");
+            monitor.appendMsg(socket.getInetAddress()+"에서 접속했습니다."+ "\r\n");
             
             Receiver receiver = new Receiver(socket);
             receiver.start();
-        }
-        
-        
+        }        
     }
 
-    //맵의 내용(클라이언트) 저장한다
+    //맵의 내용(클라이언트) 저장한다.
     public void addClient(String nick, DataOutputStream out) throws IOException {
-        sendMessage(nick + "님이 접속했습니다..");
+        sendMessage(nick + "님이 접속했습니다.");
         clientsMap.put(nick, out);
     }
     
@@ -54,11 +49,10 @@ public class Setting {
     public void removeClient(String nick) {
         sendMessage(nick + "님이 나갔습니다.");
         clientsMap.remove(this);
-    }
-    
+    }    
     
     public void sendMessage(String msg) {
-    	//전송할 메세지가 발생하면,
+        //전송할 메세지가 발생하면,
         //맵에 저장된 모든 클라이언트 정보를 가져와
         Iterator<String> it = clientsMap.keySet().iterator();
         String key = "";
@@ -88,11 +82,11 @@ public class Setting {
             addClient(nick, out);
         }
         
-      //Thread를 상속받았으므로, run() 메소드를 오버라이드해야 한다.
+        //Thread를 상속받았으므로, run() 메소드를 오버라이드해야 한다.
         public void run() {
             try {      //계속 듣기만 한다.
                 while (in != null) {
-                	//소켓을 통해 데이터를 읽어와서
+                    //소켓을 통해 데이터를 읽어와서
                     message = in.readUTF();
                     //메세지를 각 클라이언트에 전송한다.
                     sendMessage(message);
@@ -100,19 +94,16 @@ public class Setting {
                     monitor.appendMsg(message);
                 }
             }catch (IOException e) {
-            	//사용자가 접속종료시 여기서 에러발생.
+                //사용자가 접속종료시 여기서 에러발생.
                 //이것은 사용자가 나간 것을 의미하므로 
                 //여기서 클라이언트를 제거한다.
                 removeClient(nick);
             }
         }
-    }
-    
+    }   
     
     public static void main(String[] args) throws IOException{
         Setting server = new Setting();
-        server.set();
-        
-        
+        server.set();  
     }
 }

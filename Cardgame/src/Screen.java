@@ -23,6 +23,9 @@ import javax.swing.JOptionPane;
  */
 public class Screen extends javax.swing.JFrame {
     
+    /* 
+    각 클라이언트들을 처리해줄 Class 
+    */
     public class Client extends Thread{
     	private Socket socket;
 	private DataInputStream in;
@@ -30,22 +33,31 @@ public class Screen extends javax.swing.JFrame {
         private String msg;
         private String Name;
         
-        public void run() {          
-		try {                
-			socket = new Socket("127.0.0.1", 9999);
+        /*
+        해당 쓰레드에서 해당 클라이언트
+        */
+        public void run() {
+            
+		try {
+                        
+			socket = new Socket("127.0.0.1", 9999); // IP 127.0.0.1 , 포트 9999 소켓 연결
 			chatLog.append("서버에 연결 되었습니다. \r\n");
                         
                         out = new DataOutputStream(socket.getOutputStream());
 			in = new DataInputStream(socket.getInputStream());
 
-			out.writeUTF("User");
-			chatLog.append("채팅을 시작하셔도 됩니다. \r\n");
-                
-			while(in!=null){               
-				msg=in.readUTF();
+			out.writeUTF("쑤수수수발");         // 서버에 ( ) 안의 값을 전달.
+			chatLog.append("채팅을 시작하셔도 됩니다. \r\n");   // 현재 클라이언트의 텍스트 필드에 내용 추가.
+                        
+                        
+			while(in!=null){
+                            
+				msg=in.readUTF();       // 서버에서 클라이언트로 전달된 값을 읽어옴.
                                 System.out.println(msg);
-				chatLog.append(msg);			
-			}                    
+				chatLog.append(msg);			// 텍스트 Area에 값 넣기.
+			}
+                                
+                                
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -53,17 +65,21 @@ public class Screen extends javax.swing.JFrame {
        
         public void sendMessage(String msg) {
             try {
-                out.writeUTF(msg);
+                out.writeUTF(msg);  // 서버로 값 전송.
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }    
+        }
+        
+        
 }
     private Client c = null;
     private Dimension ScreenSize = null;
     private PopUp p = new PopUp(this, true);
-
-    private ArrayList Cards = new ArrayList();
+    /**
+     * Creates new form Screen
+     */
+        private ArrayList Cards = new ArrayList();
 
     // Contain
     private Component[] contain = null;
@@ -92,38 +108,49 @@ public class Screen extends javax.swing.JFrame {
     
     public Screen() {
         initComponents();
-        c = new Client(); 
+        c = new Client();
         c.start();
         initButton();
         Center();
     }
+   
+    /*
+    폼을 중앙에 일치시키기 위함.
+    */
     
     public void Center() {
+
         ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int cx = (ScreenSize.width / 2) - (this.getWidth() / 2); // 스크린 중앙 배치
         int cy = (ScreenSize.height / 2) - (this.getHeight() / 2);
         this.setLocation(cx, cy);
+
     }
     
+    /*
+    카드로 쓸 버튼들을 배열에 넣어서 플레이어별 조작이 용이하도록 초기화
+    */
     public void initButton() {
-        
+
         DrawIndex = 0;
+
         
          SouthCard = new JButton[]{s1,s2,s3,s4,s5,s6,s7,s8,};
          WestCard = new JButton[]{w1,w2,w3,w4,w5,w6,w7,w8};
          NorthCard = new JButton[]{n1,n2,n3,n4,n5,n6,n7,b1};
          EastCard = new JButton[]{e1,e2,e3,e4,e5,e6,e7,e8};
         
-         UserCard = new JButton[][]{SouthCard,WestCard,NorthCard,EastCard};       
+         UserCard = new JButton[][]{SouthCard,WestCard,NorthCard,EastCard};
+        
          
         Cards.add("A_0");
         Cards.add("A_1");
         Cards.add("B_0");
         Cards.add("B_1");
         Cards.add("C_0");
-        Cards.add("C_1"); // a(10),b(11),c(조커)는 여기서 add 
+        Cards.add("C_1");
 
-        for (int i = 0; i < 10; i++) { // 0~9까지는 for문으로 add, shuffle 쓸려고 add
+        for (int i = 0; i < 10; i++) { // shuffle 쓸려고 add
             Cards.add(i + "_" + "0");
             Cards.add(i + "_" + "1");
         }
@@ -151,19 +178,23 @@ public class Screen extends javax.swing.JFrame {
         chatLog.append(msg);
     }
     
+    /*
+    다이어로그 PopUp 를 통해 들어온 값이 참인지 거짓인지 판별.
+    */
     private void Check(JButton compare) {
         // TODO add your handling code here:
         p.setVisible(true);
 
         if (p.ReturnValue().equals(compare.getText())) {
-            JOptionPane.showMessageDialog(null, "일치함");
+            JOptionPane.showMessageDialog(null, "맞아");
         } else if (p.ReturnValue().equals("-1_-1")) {
-            JOptionPane.showMessageDialog(null, "취소");
+            JOptionPane.showMessageDialog(null, "취소 버튼");
         } else {
-            JOptionPane.showMessageDialog(null, "불일치함");
+            JOptionPane.showMessageDialog(null, "틀려");
         }
     }
 
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
@@ -617,17 +648,22 @@ public class Screen extends javax.swing.JFrame {
         ArrayList needSort = new ArrayList();
         CIndex = new int[4]; // 0 남, 1 서, 2 북, 3 동
 
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < 4; i++){ // 플레이어 4명
 
             for(int j = 0; j < 4; j++)
-            needSort.add(Cards.get(DrawIndex++)); // 정렬
+            needSort.add(Cards.get(DrawIndex++)); // Cards 배열로 부터 저장된 4개의 값을 가져옴.
 
-            Collections.sort(needSort);
+            Collections.sort(needSort); // 가져온 값들을 정렬.
 
+            /*
+            4명이 다 들어있다는 가정하에,
+            각 버튼 별 데이터를 입력해줌.
+            위에서 정렬한대로 그대로 각 버튼의 값을 set.
+            */
             for(int k = 0; k < 4; k++){
                 JButton button = (JButton)UserCard[i][k];
                 button.setText(needSort.get(k).toString());
-                /*
+                /* 카드 사진 추가
                 ImageIcon icon = new ImageIcon(getClass().getResource("/data/bb.jpg"));
 
                 if(i==1 || i==3)
@@ -640,15 +676,17 @@ public class Screen extends javax.swing.JFrame {
                 button.setVisible(true);
                 CIndex[i]++;
             }
+
             needSort.clear(); // 비워줌
         }
+
         ChatPanel.setVisible(true);
         StartButton.setVisible(false);
         DrawButton.setVisible(true);
     }                                           
 
     private void DrawButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
-
+        // TODO add your handling code here:
         int index;
 
         //UserCard[유저][버튼순서];
@@ -659,7 +697,8 @@ public class Screen extends javax.swing.JFrame {
         if(DrawIndex == 25) // 26장 다 하면 아무에게도 안보임. ( 공통요소 )
         DrawButton.setVisible(false);
 
-        if(CIndex[0] >= 10){
+        if(CIndex[0] >= 8){
+
             // 해당 유저에게만 DrawButton 이 안보이도록. 하는 코드가 필요함. (단독 요소)
             return;
         }
@@ -667,14 +706,18 @@ public class Screen extends javax.swing.JFrame {
 
         UserCard[0][CIndex[0]].setText(Cards.get(DrawIndex++).toString());
         // .setText(Cards.get(DrawIndex++).toString() 공통부분.
-            UserCard[0][CIndex[0]++].setVisible(true);
+            UserCard[0][CIndex[0]++].setVisible(true);  // 드로우를 통해 들어온 값 버튼에 세팅.
 
             for(int i = 0; i < CIndex[0]; i++)
             temp.add(UserCard[0][i].getText());
 
             Collections.sort(temp);
 
-            if(temp.contains("C_0") || temp.contains("C_1")) // 검은색조커, 흰색 조커일경우,
+            
+            /*
+            C_0 또는 C_1 (하얀색 또는 검은색 조커) 가 들어올 경우에 해당 값을 랜덤하게 카드내부에서 위치시킵니다.
+            */
+            if(temp.contains("C_0") || temp.contains("C_1"))
             {
                 if(temp.contains("C_0")){
                     index = (int)(Math.random() * (temp.size() - 2));
@@ -690,9 +733,15 @@ public class Screen extends javax.swing.JFrame {
             }
 
             for(int i = 0; i < CIndex[0]; i++)
-                UserCard[0][i].setText(temp.get(i).toString());
+            UserCard[0][i].setText(temp.get(i).toString());
     }                                          
 
+    
+    /*
+    채팅방에서 엔터를 누르고 있을 경우
+    텍스트 아레아에 존재하고 있던 값을 서버에 전송시키고,
+    서버는 그 값을 클라이언트들에게 뿌려줌.
+    */
     private void ChatKeyPressed(java.awt.event.KeyEvent evt) {                                
         // TODO add your handling code here:
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
@@ -718,10 +767,8 @@ public class Screen extends javax.swing.JFrame {
     }                                
 
     private void s1ActionPerformed(java.awt.event.ActionEvent evt) {                                   
-        initComponents();
-        p.InitValue();
-        
-       
+        // TODO add your handling code here:
+        Check(s1);
     }                                  
 
     /**
