@@ -12,11 +12,15 @@ public class PopUp extends javax.swing.JDialog {
     
     public void InitValue(){
         color = -1;
-        number = -1;
-        
+        number = -1;     
     }
     
-    public String ReturnValue(){       
+    
+    /*
+    다이어 로그에 입력된 번호_색깔 의 값을 Return 해주는 함수.
+    */
+    public String ReturnValue(){
+        
         if(number < 10)
             return number+"_"+color;
         
@@ -25,9 +29,11 @@ public class PopUp extends javax.swing.JDialog {
         else if(number == 11)
             return "B_" + color;
         else
-            return "C_" + color; // 조커      
+            return "C_" + color;
+        
     }
 
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
@@ -113,31 +119,37 @@ public class PopUp extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>                        
 
+    /*
+    OK 버튼을 누르면 해당 박스들에서 설정된 인덱스 값을 변수에 저장합니다.
+    */
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // ok 버튼
+        // TODO add your handling code here:
         this.color = colorBox.getSelectedIndex();
         this.number = numberBox.getSelectedIndex();
         this.setVisible(false);
     }                                        
 
     private void cancleButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        // cancle 버튼
+        // TODO add your handling code here:
         this.setVisible(false);
         InitValue();
     }                                            
 
     private void numberBoxActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // 숫자 버튼
+        // TODO add your handling code here:
         this.color = colorBox.getSelectedIndex();
         this.number = numberBox.getSelectedIndex();
     }                                         
 
     private void colorBoxActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // 색깔 버튼
+        // TODO add your handling code here:
         this.color = colorBox.getSelectedIndex();
         this.number = numberBox.getSelectedIndex();
     }                                        
 
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
