@@ -1,4 +1,3 @@
-
 package Server;
 
 import java.io.DataInputStream;
@@ -40,10 +39,7 @@ public class SettingChat {
             monitor.appendMsg(socket.getInetAddress()+"에서 접속했습니다."+ "\r\n");
             Receiver receiver = new Receiver(socket);   // 해당 소켓을 Receiver 라는 클래스로 보낸다.
             receiver.start();       // 해당 클래스 쓰레드 시작.
-
-        }
-        
-        
+        }               
     }
 
     //맵의 내용(클라이언트) 저장한다.
@@ -115,8 +111,3 @@ public class SettingChat {
     }
    
 }
-
-
-
-
-

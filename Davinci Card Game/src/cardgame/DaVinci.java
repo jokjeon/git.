@@ -1,4 +1,3 @@
-
 package cardgame;
 
 import java.awt.Color;
@@ -35,7 +34,7 @@ public class DaVinci extends JFrame implements ActionListener{
 	JPasswordField pwd;
 	JButton go;
 	JButton sign;
-	Icon icon1 = new ImageIcon("src/Imageg/go.jpg");
+	Icon icon1 = new ImageIcon("src/data/go.jpg");
 	
 	public DaVinci(){
 		
@@ -46,8 +45,8 @@ public class DaVinci extends JFrame implements ActionListener{
 		
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		MediaTracker mt = new MediaTracker(this);
-		mt.addImage(tk.getImage("src/cardgame/Image/BackGround.jpg"), 0);
-		jip = new JImagePanel(tk.getImage("src/cardgame/Image/BackGround.jpg"));
+		mt.addImage(tk.getImage("src/data/BackGround.jpg"), 0);
+		jip = new JImagePanel(tk.getImage("src/data/BackGround.jpg"));
 		
 		jip.setLayout(null);
 		jip.setBounds(0,0,100,100);

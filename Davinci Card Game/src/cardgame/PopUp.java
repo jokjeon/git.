@@ -3,10 +3,7 @@ package cardgame;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
-/**
- *
- * @author Administrator
- */
+
 public class PopUp extends javax.swing.JDialog {
 
     private int color;
