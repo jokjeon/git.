@@ -2,6 +2,7 @@ package cardgame;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MediaTracker;
@@ -23,8 +24,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
-
 
 public class DaVinci extends JFrame implements ActionListener{
 	
@@ -34,19 +33,25 @@ public class DaVinci extends JFrame implements ActionListener{
 	JPasswordField pwd;
 	JButton go;
 	JButton sign;
-	Icon icon1 = new ImageIcon("src/data/go.jpg");
+	Dimension ScreenSize = null;
+	Icon icon1 = new ImageIcon(getClass().getResource("/data/go.jpg"));
 	
 	public DaVinci(){
 		
 		super("Davinci Code Online");
+		
+	    ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    int cx = (ScreenSize.width / 2) - (this.getWidth() / 2); // 스크린 중앙 배치
+	    int cy = (ScreenSize.height / 2) - (this.getHeight() / 2);
+	    this.setLocation(cx, cy);
 		
 		this.setSize(568,297);
 		this.setResizable(false);
 		
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		MediaTracker mt = new MediaTracker(this);
-		mt.addImage(tk.getImage("src/data/BackGround.jpg"), 0);
-		jip = new JImagePanel(tk.getImage("src/data/BackGround.jpg"));
+		mt.addImage(tk.getImage(getClass().getResource("/data/BackGround.jpg")), 0);
+		jip = new JImagePanel(tk.getImage(getClass().getResource("/data/BackGround.jpg")));
 		
 		jip.setLayout(null);
 		jip.setBounds(0,0,100,100);

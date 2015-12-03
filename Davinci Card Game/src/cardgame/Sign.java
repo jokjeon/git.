@@ -1,7 +1,9 @@
 package cardgame;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -30,16 +32,20 @@ public class Sign extends JFrame implements ActionListener{
 	JLabel lpwChek;
 	JButton join;
 	JButton exit;
-       
+    Dimension ScreenSize;       
         
-	public Sign() {
-            
+	public Sign() {         
             
 		setTitle("회원가입");
 		this.setSize(224,150);
 		this.setResizable(false);
 
-		jp.setLayout(null);
+        ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int cx = (ScreenSize.width / 2) - (this.getWidth() / 2); // 스크린 중앙 배치
+        int cy = (ScreenSize.height / 2) - (this.getHeight() / 2);
+        this.setLocation(cx, cy);
+		
+        jp.setLayout(null);
 		jp.setBounds(0,0,100,100);
 		cp.add(jp);
 		

@@ -26,7 +26,10 @@ import javax.swing.GroupLayout;
 import javax.swing.JOptionPane;
 
 
-public class Screen extends javax.swing.JFrame {    
+public class Screen extends javax.swing.JFrame {
+    
+ 
+    
     /* 
     각 클라이언트들을 처리해줄 Class 
     */
@@ -73,12 +76,15 @@ public class Screen extends javax.swing.JFrame {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }        
+        }
+        
+        
     }
     
     public class Game extends Thread{
     	private Socket socket;
-    	private DataInputStream in;private DataOutputStream out;
+	private DataInputStream in;
+	private DataOutputStream out;
         private int msg;
         private int Player;
         private int MyTurn = 0;
@@ -317,6 +323,17 @@ public class Screen extends javax.swing.JFrame {
                     }
         
                  UserCard[i][j].setIcon(icon);
+                 
+                 if(i == Player){
+                     if(i == 0)
+                         UserCard[i][j].setLocation(UserCard[i][j].getX(), UserCard[i][j].getY()+10);
+                     else if(i == 1)
+                         UserCard[i][j].setLocation(UserCard[i][j].getX()-10, UserCard[i][j].getY());
+                     else if(i == 2)
+                         UserCard[i][j].setLocation(UserCard[i][j].getX(), UserCard[i][j].getY()-10);
+                     else if(i == 3)
+                         UserCard[i][j].setLocation(UserCard[i][j].getX()+10, UserCard[i][j].getY());
+                 }
                  
                  
         }

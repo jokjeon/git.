@@ -14,4 +14,16 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/data/back1.png</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Desktop/Davinci%20game%201/CardGame%20(2)/src/data/back1.png</locationURI>
+		</link>
+		<link>
+			<name>src/data/back2.png</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Desktop/Davinci%20game%201/CardGame%20(2)/src/data/back2.png</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

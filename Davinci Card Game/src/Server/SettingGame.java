@@ -12,7 +12,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
+/**
+ *
+ * @author Sensor
+ */
 public class SettingGame{
     
     private ServerSocket serverSocket;
@@ -39,7 +42,8 @@ public class SettingGame{
     }
     public void setCards(){
         cardIndex = 0;
-                
+        
+        
         for(int i=0; i<4; i++){
             UserCard[i] = new ArrayList<String>();
             UserCard[i].clear();
@@ -88,7 +92,9 @@ public class SettingGame{
             socket = serverSocket.accept();     // 소켓에 사용자가 접속할때 까지 대기 -
             Activity act = new Activity(socket);   // 해당 소켓을 Receiver 라는 클래스로 보낸다.
             act.start();       // 해당 클래스 쓰레드 시작.
-        }           
+        }
+        
+        
     }
 
     //맵의 내용(클라이언트) 저장한다.
@@ -104,7 +110,8 @@ public class SettingGame{
         clientsMap.remove(nick);
     }
     
-    public String separatePacket(String msg){      
+    public String separatePacket(String msg){
+        
         return null;
     }
     
@@ -158,7 +165,9 @@ public class SettingGame{
                         if(OpenCards.contains(in.readUTF())){
                             out.writeUTF("5");
                             out.writeUTF("1");
-                        }                                                
+                        }
+                        
+                        
                     }
                     
                     if(message.equals("CardOK")){
@@ -192,7 +201,9 @@ public class SettingGame{
                                     clientsMap.get(key).writeUTF(turn + "");
                             }
                             continue;
-                        }                                                      
+                        }
+                            
+                            
                         
                         for(String key : clientsMap.keySet()){
                                 clientsMap.get(key).writeUTF("1");
@@ -207,6 +218,7 @@ public class SettingGame{
                         for(i=0; i < cardsIndex[who]; i++){
                             if(!OpenCards.contains(UserCard[who].get(i))){
                                 OpenCardsCount[who]++;
+                                OpenCards.add(UserCard[who].get(i));
                                 break;
                             }
                         }
@@ -214,7 +226,8 @@ public class SettingGame{
                         for(String key : clientsMap.keySet()){
                                 clientsMap.get(key).writeUTF("1");
                                 clientsMap.get(key).writeUTF(UserCard[who].get(i));
-                        }                       
+                        }
+                        
                     }
                     
                     
@@ -229,6 +242,7 @@ public class SettingGame{
                                     clientsMap.get(key).writeUTF(index + "");
                                     clientsMap.get(key).writeUTF(turn + "");
                                     clientsMap.get(key).writeUTF(cardsIndex[turn] + "");
+
                             }
                             setDraw(turn);
                         }
@@ -269,7 +283,9 @@ public class SettingGame{
                         Collections.shuffle(Cards);
                         setCards();
                         OpenCards.clear();
-                    }                                       
+                    }
+                    
+                    
                 }
             }catch (IOException e) {
                 removeClient(nick);
